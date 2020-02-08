@@ -32,10 +32,10 @@ public class GlobalExceptionHandler {
     }
 
     //自定义异常  必须在使用处try catch
-    /*@ExceptionHandler(GuliException.class)
+    @ExceptionHandler(GuliException.class)
     @ResponseBody
     public R error(GuliException e){
         e.printStackTrace();
         return R.error().message(e.getMsg()).code(e.getCode());
-    }*/
+    }
 }
