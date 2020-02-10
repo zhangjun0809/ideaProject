@@ -27,7 +27,7 @@ public class FileServiceImpl implements FileService {
         String accessKeyId = ConstantPropertiesUtil.ACCESS_KEY_ID;
         String accessKeySecret = ConstantPropertiesUtil.ACCESS_KEY_SECRET;
         String bucketName = ConstantPropertiesUtil.BUCKET_NAME;
-        String fileHost = ConstantPropertiesUtil.FILE_HOST;
+        //String fileHost = ConstantPropertiesUtil.FILE_HOST;
 
         String uploadUrl = null;
 
@@ -52,7 +52,7 @@ public class FileServiceImpl implements FileService {
             String fileName = UUID.randomUUID().toString();
             String fileType = original.substring(original.lastIndexOf("."));
             String newName = fileName + fileType;
-            String fileUrl = fileHost + "/" + filePath + "/" + newName;
+            String fileUrl =  filePath + "/" + newName;
 
             //文件上传至阿里云
             ossClient.putObject(bucketName, fileUrl, inputStream);
