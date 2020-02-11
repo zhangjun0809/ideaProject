@@ -103,6 +103,8 @@ public class EduTeacherController {
         teacherService.page(page, wrapper);
         long total = page.getTotal();
         List<EduTeacher> records = page.getRecords();
+
+
         return R.ok().data("total", total).data("items", records);
 
     }

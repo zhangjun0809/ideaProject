@@ -147,6 +147,7 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
                BeanUtils.copyProperties(cc, twoSubjectVo);
                OnesubjuecVo onesubjuecVo = map.get(id);
                onesubjuecVo.getChildren().add(twoSubjectVo);
+
            }
        }
         return finalSubjectList;
