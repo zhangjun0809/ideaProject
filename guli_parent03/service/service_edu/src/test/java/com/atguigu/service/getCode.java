@@ -53,7 +53,7 @@ public class getCode {
 
         // 4、包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName("serviceedu"); //模块名
+        pc.setModuleName("eduservice"); //模块名
         pc.setParent("com.atguigu");
         pc.setController("controller");
         pc.setEntity("entity");
@@ -63,7 +63,7 @@ public class getCode {
 
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setInclude("edu_course_description");
+        strategy.setInclude("edu_chapter","edu_video");
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
         strategy.setTablePrefix(pc.getModuleName() + "_"); //生成实体时去掉表前缀
 

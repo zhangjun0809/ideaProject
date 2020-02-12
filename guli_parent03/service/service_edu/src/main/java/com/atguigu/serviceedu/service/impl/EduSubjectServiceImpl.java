@@ -129,14 +129,9 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
 
         //3封装一级分类
         for (int i = 0; i <oneSubjectList.size() ; i++) {
-            //获得每一个一级分类
             EduSubject oneSubject = oneSubjectList.get(i);
-            //oneSubject 转化成OneSubjectVo
             OnesubjuecVo oneSubjectVo = new OnesubjuecVo();
-            //oneSubjectVo.setId(oneSubject.getId());
-            //oneSubjectVo.setTitle(oneSubject.getTitle());
             BeanUtils.copyProperties(oneSubject, oneSubjectVo);
-            //oneSubjectVo存入finalSubjectList
             finalSubjectList.add(oneSubjectVo);
             map.put(oneSubjectVo.getId(), oneSubjectVo);
         }
@@ -147,7 +142,6 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
                BeanUtils.copyProperties(cc, twoSubjectVo);
                OnesubjuecVo onesubjuecVo = map.get(id);
                onesubjuecVo.getChildren().add(twoSubjectVo);
-
            }
        }
         return finalSubjectList;

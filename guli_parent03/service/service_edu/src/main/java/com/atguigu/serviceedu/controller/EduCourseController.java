@@ -41,5 +41,12 @@ public class EduCourseController {
 
         return R.ok().data("courseInfoForm",courseInfoForm);
     }
+    @ApiOperation(value="修改课程信息")
+    @PostMapping("updataCourse")
+    public R updataCourse(@RequestBody CourseInfoForm courseInfoForm){
+        eduCourseService.updataCourse(courseInfoForm);
+
+        return R.ok();
+    }
 }
 

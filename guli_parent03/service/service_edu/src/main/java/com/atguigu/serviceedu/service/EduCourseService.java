@@ -17,4 +17,6 @@ public interface EduCourseService extends IService<EduCourse> {
     String addCourseInfo(CourseInfoForm courseInfoForm);
 
     CourseInfoForm getCourseIn(String id);
+
+    void updataCourse(CourseInfoForm courseInfoForm);
 }

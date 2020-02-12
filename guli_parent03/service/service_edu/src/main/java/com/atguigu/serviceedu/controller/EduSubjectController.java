@@ -21,14 +21,16 @@ import java.util.List;
  * @author atguigu
  * @since 2020-02-08
  */
-@Api(description = "课程分离管理")
 @CrossOrigin
 @RestController
+@Api(description = "课程分离管理")
 @RequestMapping("/eduservice/edusubject")
 public class EduSubjectController {
 
     @Autowired
     EduSubjectService eduSubjectService;
+
+
 
     @ApiOperation(value="导入添加课程分类")
     @PostMapping("addSubject")
@@ -42,6 +44,7 @@ public class EduSubjectController {
             return R.error().data("magList", magList);
         }
     }
+
     @ApiOperation(value="查询课程分类")
     @GetMapping
     public R getAllSubject(){
