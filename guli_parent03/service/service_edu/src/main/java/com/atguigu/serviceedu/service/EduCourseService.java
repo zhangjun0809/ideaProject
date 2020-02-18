@@ -2,6 +2,9 @@ package com.atguigu.serviceedu.service;
 
 import com.atguigu.serviceedu.entity.EduCourse;
 import com.atguigu.serviceedu.entity.vo.CourseInfoForm;
+import com.atguigu.serviceedu.entity.vo.CoursePublishVo;
+import com.atguigu.serviceedu.entity.vo.CourseQuery;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -18,5 +21,11 @@ public interface EduCourseService extends IService<EduCourse> {
 
     CourseInfoForm getCourseIn(String id);
 
-    void updataCourse(CourseInfoForm courseInfoForm);
+    String updataCourse(CourseInfoForm courseInfoForm);
+
+    CoursePublishVo getCoursePublishVoById(String courseId);
+
+    void queryCourse(Page<EduCourse> pageParam, CourseQuery courseQuery);
+
+    void deleteCourse(String courseId);
 }

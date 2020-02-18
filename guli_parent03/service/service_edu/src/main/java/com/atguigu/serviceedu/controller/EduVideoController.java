@@ -2,11 +2,13 @@ package com.atguigu.serviceedu.controller;
 
 
 import com.atguigu.commonutils.R;
+import com.atguigu.serviceedu.client.VodClient;
 import com.atguigu.serviceedu.entity.EduVideo;
 import com.atguigu.serviceedu.service.EduVideoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,6 +27,8 @@ public class EduVideoController {
 
     @Autowired
     EduVideoService eduVideoService;
+    @Autowired
+    VodClient vodClient;
 
     @ApiOperation(value="添加小节")
     @PostMapping("addVideo")
@@ -36,6 +40,14 @@ public class EduVideoController {
     @DeleteMapping("{id}")
     //TODO 删除小节，需要删除阿里云对应的视频
     public R deleteVideo(@PathVariable String id){
+
+        //根据小节ID查询视频ID
+        EduVideo byId = eduVideoService.getById(id);
+        String videoSourceId = byId.getVideoSourceId();
+        //2判断视频id不为空
+        if (!StringUtils.isEmpty(videoSourceId)){
+            vodClient.deleteRideoAliyun(videoSourceId);
+        }
 
         eduVideoService.removeById(id);
         return R.ok();

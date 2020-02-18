@@ -13,10 +13,37 @@
     <modules>
         <module>service_edu</module>
         <module>service_oss</module>
+        <module>service_vod</module>
+        <module>service_cms</module>
+        <module>service_msm</module>
+        <module>service_ucenter</module>
     </modules>
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+        </dependency>
+
+        <!--hystrix依赖，主要是用  @HystrixCommand -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+
+        <!--服务调用-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!--服务注册-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
         <!--xlsx-->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -100,4 +127,15 @@
             <artifactId>gson</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
 </project>

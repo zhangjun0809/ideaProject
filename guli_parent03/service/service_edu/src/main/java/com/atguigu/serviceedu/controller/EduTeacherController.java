@@ -9,6 +9,7 @@ import com.atguigu.serviceedu.entity.EduTeacher;
 import com.atguigu.serviceedu.entity.vo.TeacherQuery;
 import com.atguigu.serviceedu.service.EduTeacherService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -101,6 +102,7 @@ public class EduTeacherController {
         }
         wrapper.orderByDesc("gmt_create");
         teacherService.page(page, wrapper);
+
         long total = page.getTotal();
         List<EduTeacher> records = page.getRecords();
 
