@@ -1,4 +1,4 @@
-package com.atguigu.ucenterservice;
+package com.atguigu.orderservice;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -9,15 +9,15 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @author Zhangjun
- * @create 2020-02-17 16:51
+ * @create 2020-02-22 11:42
  */
 @SpringBootApplication
 @ComponentScan({"com.atguigu"})
-@MapperScan("com.atguigu.ucenterservice.mapper")
 @EnableEurekaClient
 @EnableFeignClients
-public class ServiceApplication {
+@MapperScan("com.atguigu.orderservice.mapper")
+public class OrderApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ServiceApplication.class,args);
+        SpringApplication.run(OrderApplication.class,args);
     }
 }

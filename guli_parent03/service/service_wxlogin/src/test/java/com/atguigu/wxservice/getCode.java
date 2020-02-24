@@ -1,4 +1,4 @@
-package com.atguigu.ucenterservice;
+package com.atguigu.wxservice;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -53,7 +53,7 @@ public class getCode {
 
         // 4、包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName("ucenterservice"); //模块名
+        pc.setModuleName("wxservice"); //模块名
         pc.setParent("com.atguigu");
         pc.setController("controller");
         pc.setEntity("entity");

@@ -6,21 +6,24 @@ import com.atguigu.serviceedu.entity.EduChapter;
 import com.atguigu.serviceedu.entity.EduCourse;
 import com.atguigu.serviceedu.entity.EduCourseDescription;
 import com.atguigu.serviceedu.entity.EduVideo;
-import com.atguigu.serviceedu.entity.vo.CourseInfoForm;
-import com.atguigu.serviceedu.entity.vo.CoursePublishVo;
-import com.atguigu.serviceedu.entity.vo.CourseQuery;
+import com.atguigu.serviceedu.entity.vo.*;
 import com.atguigu.serviceedu.mapper.EduCourseMapper;
 import com.atguigu.serviceedu.service.EduChapterService;
 import com.atguigu.serviceedu.service.EduCourseDescriptionService;
 import com.atguigu.serviceedu.service.EduCourseService;
 import com.atguigu.serviceedu.service.EduVideoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -148,5 +151,63 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
             throw new GuliException(20001,"删除课程失败");
         }
 
+    }
+//前台课程分页查询功能
+    @Override
+    public Map<String, Object> getCouresePageList(Page<EduCourse> page, CourseFrontVo courseFrontVo) {
+        //1去除查询条件
+        String subjectParentId = courseFrontVo.getSubjectParentId();
+        String subjectId = courseFrontVo.getSubjectId();
+        String buyCountSort = courseFrontVo.getBuyCountSort();//关注度
+        String priceSort = courseFrontVo.getPriceSort();//价格排序
+        String gmtCreateSort = courseFrontVo.getGmtCreateSort();//创建时间
+
+        //判断条件是否配到sql中
+        QueryWrapper<EduCourse> warpper = new QueryWrapper<>();
+
+        if (!StringUtils.isEmpty(subjectParentId)){
+            warpper.eq("subject_parent_id",subjectParentId);
+        }
+        if (!StringUtils.isEmpty(subjectId)){
+            warpper.eq("subject_id",subjectId);
+        }
+        if (!StringUtils.isEmpty(buyCountSort)){
+            warpper.orderByDesc("buy_count");
+        }
+        if (!StringUtils.isEmpty(priceSort)){
+            warpper.orderByDesc("price");
+        }
+        if (!StringUtils.isEmpty(gmtCreateSort)){
+            warpper.orderByDesc("gmt_create");
+        }
+        baseMapper.selectPage(page,warpper);
+        Map<String, Object> map = new HashMap<>();
+
+        List<EduCourse> records = page.getRecords();
+        long current = page.getCurrent();
+        long pages = page.getPages();
+        long size = page.getSize();
+        long total = page.getTotal();
+        boolean hasNext = page.hasNext();
+        boolean hasPrevious = page.hasPrevious();
+
+        map.put("items", records);
+        map.put("current", current);
+        map.put("pages", pages);
+        map.put("size", size);
+        map.put("total", total);
+        map.put("hasNext", hasNext);
+        map.put("hasPrevious", hasPrevious);
+
+
+        return map;
+    }
+
+    //课程详情
+    @Override
+    public CourseFrontInfo getFrontCourseInfo(String id) {
+        CourseFrontInfo frontCourseInfo = baseMapper.getFrontCourseInfo(id);
+        // baseMapper.getFrontCourseChacper(id);
+        return frontCourseInfo;
     }
 }

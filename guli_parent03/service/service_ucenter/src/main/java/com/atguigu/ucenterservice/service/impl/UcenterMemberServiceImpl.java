@@ -1,16 +1,15 @@
 package com.atguigu.ucenterservice.service.impl;
 
+import com.atguigu.commonutils.JwtUtils;
 import com.atguigu.commonutils.MD5;
 import com.atguigu.servicebase.handler.GuliException;
 import com.atguigu.ucenterservice.entity.UcenterMember;
-import com.atguigu.ucenterservice.entity.vo.RegisterVo;
 import com.atguigu.ucenterservice.mapper.UcenterMemberMapper;
+import com.atguigu.ucenterservice.entity.vo.RegisterVo;
 import com.atguigu.ucenterservice.service.UcenterMemberService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -64,5 +63,39 @@ public class UcenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
             throw new GuliException(20001,"注册失败");
         }
 
+    }
+
+    @Override
+    public String login(UcenterMember member) {
+
+        String mobile = member.getMobile();
+        String password = member.getPassword();
+        //1 判断手机号和密码是否为空
+        if (StringUtils.isEmpty(mobile)||StringUtils.isEmpty(password)){
+            throw new GuliException(20001,"手机号或密码有误");
+        }
+        //根据手机号查询
+        QueryWrapper<UcenterMember> wrapper = new QueryWrapper<>();
+        wrapper.eq("mobile",mobile);
+        UcenterMember ucenterMember = baseMapper.selectOne(wrapper);
+        if (ucenterMember==null){
+            throw new GuliException(20001,"手机号或密码有误");
+        }
+        //3判断密码
+        String password1 = ucenterMember.getPassword();
+        String encrypt = MD5.encrypt(password);
+        if (!password1.equals(encrypt)) {
+            throw new GuliException(20001,"手机号或密码有误");
+        }
+        //4判断用户是否被禁用
+        Boolean isDisabled = ucenterMember.getIsDisabled();
+        if (isDisabled) {
+            throw new GuliException(20001,"手机号或密码有误(禁用)");
+        }
+        //5生成token字符串
+        String id = ucenterMember.getId();
+        String nickname = ucenterMember.getNickname();
+        String jwtToken = JwtUtils.getJwtToken(id, nickname);
+        return jwtToken;
     }
 }

@@ -1,11 +1,11 @@
 package com.atguigu.serviceedu.service;
 
 import com.atguigu.serviceedu.entity.EduCourse;
-import com.atguigu.serviceedu.entity.vo.CourseInfoForm;
-import com.atguigu.serviceedu.entity.vo.CoursePublishVo;
-import com.atguigu.serviceedu.entity.vo.CourseQuery;
+import com.atguigu.serviceedu.entity.vo.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -28,4 +28,8 @@ public interface EduCourseService extends IService<EduCourse> {
     void queryCourse(Page<EduCourse> pageParam, CourseQuery courseQuery);
 
     void deleteCourse(String courseId);
+
+    Map<String, Object> getCouresePageList(Page<EduCourse> page, CourseFrontVo courseFrontVo);
+
+    CourseFrontInfo getFrontCourseInfo(String id);
 }

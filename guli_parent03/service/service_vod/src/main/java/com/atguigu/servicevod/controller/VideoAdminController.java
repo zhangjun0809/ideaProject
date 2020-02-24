@@ -7,9 +7,12 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.vod.model.v20170321.DeleteVideoRequest;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthRequest;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthResponse;
 import com.atguigu.commonutils.R;
 import com.atguigu.servicebase.handler.GuliException;
 import com.atguigu.servicevod.handler.AliyunVodSDKUtils;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
@@ -29,8 +32,8 @@ import java.util.List;
 @Api(description = "视频管理")
 @RequestMapping("/eduvod/video")
 public class VideoAdminController {
-    @ApiOperation(value="上传视频")
 
+    @ApiOperation(value="上传视频")
     @PostMapping("uploadVideo")
     public R uploadVideo(MultipartFile file){
         //获取文件的文件名
@@ -97,5 +100,31 @@ public class VideoAdminController {
             e.printStackTrace();
         }
         return R.error();
+    }
+    @ApiOperation(value="根据视频ID获取视频播放凭证")
+    @GetMapping("getPlayAuth/{vid}")
+    public R getPlayAuth(@PathVariable String vid){
+
+        try {
+            //1创建初始化对象
+        DefaultAcsClient client = AliyunVodSDKUtils.initVodClient("LTAI4FkefUCDSYfyzFa3sV4R", "GV7fH2TPksnmF9v23p2SLhZ0GmAPTP");
+
+        //创建获取播放凭证的请求request和响应response
+        GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
+        GetVideoPlayAuthResponse response = new GetVideoPlayAuthResponse();
+        //request中放入视频id
+        request.setVideoId(vid);
+        request.setAuthInfoTimeout(3000l);
+        //调用初始化对象方法
+        response = client.getAcsResponse(request);
+        //获取凭证
+        String playAuth = response.getPlayAuth();
+            System.out.println("playAuth"+playAuth);
+            return R.ok().data("playAuth",playAuth);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new GuliException(20001,"获取视频播放凭证失败");
+        }
+
     }
 }
