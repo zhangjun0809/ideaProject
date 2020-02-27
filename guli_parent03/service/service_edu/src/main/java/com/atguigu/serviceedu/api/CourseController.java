@@ -1,8 +1,10 @@
 package com.atguigu.serviceedu.api;
 
+import com.atguigu.commonutils.JwtUtils;
 import com.atguigu.commonutils.R;
 
 import com.atguigu.commonutils.VO.CourseFrontInfoPay;
+import com.atguigu.serviceedu.client.OrderQuery;
 import com.atguigu.serviceedu.entity.EduCourse;
 import com.atguigu.serviceedu.entity.vo.*;
 import com.atguigu.serviceedu.service.EduChapterService;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +34,8 @@ public class CourseController {
     EduCourseService courseService;
     @Autowired
     EduChapterService chapterService;
+    @Autowired
+    OrderQuery orderQuery;
 
     @ApiOperation(value="前台课程条件分页查询功能")
     @PostMapping("getFrontCourseList/{current}/{limit}")
@@ -45,12 +50,17 @@ public class CourseController {
 
     @ApiOperation(value = "根据ID查询课程详情")
     @GetMapping("getCourseInfo/{id}")
-    public R  getCourseInfo(@PathVariable String id){
+    public R  getCourseInfo(@PathVariable String id, HttpServletRequest request){
         //1查询课程基本信息
         CourseFrontInfo CourseFrontInfo = courseService.getFrontCourseInfo(id);
         //2课程相关大纲数据
         List<ChapterVo> chapterVideo = chapterService.getChapterVideoById(id);
-        return R.ok().data("CourseFrontInfo",CourseFrontInfo).data("chapterVideo",chapterVideo);
+        //3查询课程是否被购买
+        String memberId = JwtUtils.getMemberIdByJwtToken(request);
+        boolean isbByCourse = orderQuery.isByCourse(id, memberId);
+        return R.ok().data("CourseFrontInfo",CourseFrontInfo)
+                .data("chapterVideo",chapterVideo)
+                .data("isbByCourse",isbByCourse);
     }
 
     @ApiOperation(value="根据ID查询课程详情,支付订单远程调用")

@@ -126,6 +126,7 @@ public class TPayLogServiceImpl extends ServiceImpl<TPayLogMapper, TPayLog> impl
             client.post();
             //3、返回第三方的数据
             String xml = client.getContent();
+            System.out.println("xml:"+xml);
             Map<String, String> resultMap = WXPayUtil.xmlToMap(xml);
             return resultMap;
         } catch (Exception e) {

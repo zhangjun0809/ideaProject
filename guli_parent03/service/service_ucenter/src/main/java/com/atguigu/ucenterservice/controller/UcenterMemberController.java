@@ -62,7 +62,13 @@ public class UcenterMemberController {
         UcenterMemberPay ucenterMemberPay = new UcenterMemberPay();
         BeanUtils.copyProperties(member,ucenterMemberPay);
         return ucenterMemberPay;
+    }
 
+    @ApiOperation(value="统计某一天的注册人数，远程调用")
+    @GetMapping("countRegister/{day}")
+    public R countRegiste(@PathVariable String day){
+        Integer count = memberService.countRegiste(day);
+        return R.ok().data("count",count);
     }
 
 }

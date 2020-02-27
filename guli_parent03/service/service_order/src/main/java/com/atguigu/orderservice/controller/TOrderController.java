@@ -6,6 +6,7 @@ import com.atguigu.commonutils.R;
 import com.atguigu.orderservice.entity.TOrder;
 import com.atguigu.orderservice.service.TOrderService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.sun.tracing.dtrace.ProviderAttributes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,16 @@ public class TOrderController {
         wrapper.eq("order_no",orderNo);
         TOrder orderInfo = orderService.getOne(wrapper);
         return R.ok().data("orderInfo",orderInfo);
+    }
+    @ApiOperation(value="查询课程是否被用户购买")
+    @GetMapping("isByCourse/{cid}/{mid}")
+    public boolean isByCourse(@PathVariable String cid,@PathVariable String mid){
+        QueryWrapper<TOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq("course_id",cid);
+        wrapper.eq("member_id",mid);
+        wrapper.eq("status",1);
+        int count = orderService.count(wrapper);
+        return count>0;
     }
 }
 

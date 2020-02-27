@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.BaseStream;
+
 /**
  * <p>
  * 会员表 服务实现类
@@ -97,5 +99,12 @@ public class UcenterMemberServiceImpl extends ServiceImpl<UcenterMemberMapper, U
         String nickname = ucenterMember.getNickname();
         String jwtToken = JwtUtils.getJwtToken(id, nickname);
         return jwtToken;
+    }
+
+    @Override
+    public Integer countRegiste(String day) {
+        Integer count = baseMapper.countRegiste(day);
+
+        return count;
     }
 }
