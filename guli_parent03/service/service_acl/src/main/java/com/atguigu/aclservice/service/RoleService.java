@@ -3,6 +3,8 @@ package com.atguigu.aclservice.service;
 import com.atguigu.aclservice.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -13,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoleService extends IService<Role> {
 
+    void saveUserRoleRealtionShip(String uid, String[] roleIds);
+
+    List<Role> selectByUserId(String id);
 }

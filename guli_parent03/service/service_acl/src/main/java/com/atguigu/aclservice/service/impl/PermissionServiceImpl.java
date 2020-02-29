@@ -1,12 +1,17 @@
 package com.atguigu.aclservice.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.atguigu.aclservice.entity.Permission;
 import com.atguigu.aclservice.entity.RolePermission;
+import com.atguigu.aclservice.entity.User;
 import com.atguigu.aclservice.mapper.PermissionMapper;
 import com.atguigu.aclservice.service.PermissionService;
 import com.atguigu.aclservice.service.RolePermissionService;
+import com.atguigu.aclservice.service.UserService;
+import com.atguigu.aclservice.utils.MenuHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +29,8 @@ import java.util.List;
 @Service
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
+    @Autowired
+    UserService userService;
 
     @Autowired
     RolePermissionService rolePermissionService;
@@ -48,6 +55,47 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
+    public List<String> selectPermissionValueByUserId(String userid) {
+        List<String> selectPermissionValueList=null;
+        //判断当前用户是否是管理员，用户名是Admin
+        //如果是管理员 查询所有的菜单值
+        if (isAdmin(userid)) {
+            selectPermissionValueList = baseMapper.selectAllPermissionValue();
+        }else {
+            selectPermissionValueList = baseMapper.selectPermissionValueByUserId(userid);
+        }
+
+        //如果不是管理员，根据用户Id查询用户菜单值
+        return selectPermissionValueList;
+    }
+
+    //根据用户id获取菜单权限
+    @Override
+    public List<JSONObject> selectPermissionById(String id) {
+        List<Permission> permissionList = null;
+        //如果是管理员 查询所有菜单
+        if (this.isAdmin(id)) {
+            permissionList = baseMapper.selectList(null);
+        }else {
+            permissionList = baseMapper.selectPermissionByUserId(id);
+        }
+        //转化成数型对象
+        List<Permission> bulid = bulid(permissionList);
+        //转化成List<JSONObject>
+        List<JSONObject> result = MenuHelper.bulid(bulid);
+        return result;
+    }
+
+    //判断用户是否是管理员
+    private boolean isAdmin(String userid){
+        User user = userService.getById(userid);
+        if (user != null && "admin".equals(user.getUsername())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public List<Permission> selectMenuByroleId(String roleId) {
         //1根据角色id 查询角色菜单关系表，查询角色关联所有菜单id
         QueryWrapper<RolePermission> wrapper = new QueryWrapper<>();
@@ -55,7 +103,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         List<RolePermission> rolePermissionList = rolePermissionService.list(wrapper);
 
         //2查询所有菜单
-        List<Permission> allPermission = baseMapper.selectList(new QueryWrapper<Permission>().orderByDesc("role_id", roleId));
+        List<Permission> allPermission = baseMapper.selectList(new QueryWrapper<Permission>().orderByDesc("id"));
         //3遍历所有菜单
         for (int i = 0; i <allPermission.size() ; i++) {
             Permission permission = allPermission.get(i);

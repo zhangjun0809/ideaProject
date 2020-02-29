@@ -1,5 +1,6 @@
 package com.atguigu.aclservice.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.atguigu.aclservice.entity.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -22,4 +23,9 @@ public interface PermissionService extends IService<Permission> {
     List<Permission> selectMenuByroleId(String roleId);
 
     void doRoleAssignPermission(String roleId, String[] permissionId);
+
+    List<String> selectPermissionValueByUserId(String id);
+
+
+    List<JSONObject> selectPermissionById(String id);
 }

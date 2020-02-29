@@ -22,7 +22,7 @@ import java.util.List;
 @Api(description = "菜单管理")
 @RestController
 @CrossOrigin
-@RequestMapping("/aclservice/permission")
+@RequestMapping("/admin/acl/permission")
 public class PermissionController {
 
     @Autowired

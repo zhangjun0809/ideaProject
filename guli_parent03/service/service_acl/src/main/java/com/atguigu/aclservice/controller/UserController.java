@@ -3,6 +3,7 @@ package com.atguigu.aclservice.controller;
 
 import com.atguigu.aclservice.entity.Role;
 import com.atguigu.aclservice.entity.User;
+import com.atguigu.aclservice.service.RoleService;
 import com.atguigu.aclservice.service.UserService;
 import com.atguigu.commonutils.MD5;
 import com.atguigu.commonutils.R;
@@ -30,9 +31,11 @@ import java.util.Map;
 @CrossOrigin
 @Api(description = "用户管理")
 @RestController
-@RequestMapping("/aclservice/user")
+@RequestMapping("/admin/acl/user")
 public class UserController {
 
+    @Autowired
+    RoleService roleService;
     @Autowired
     UserService userService;
     @ApiOperation(value = "获取管理用户分页列表")
@@ -89,6 +92,12 @@ public class UserController {
     public R toAssign(@PathVariable String uid) {
         Map<String,Object> map = userService.getRoleAssignByUid(uid);
         return R.ok().data(map);
+    }
+    @ApiOperation(value = "根据用户分配角色")
+    @PostMapping("doAssign")
+    public R doAssign(@RequestParam String userId,@RequestParam String[] roleId){
+        roleService.saveUserRoleRealtionShip(userId,roleId);
+        return R.ok();
     }
 }
 

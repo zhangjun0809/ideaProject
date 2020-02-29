@@ -26,7 +26,7 @@ import java.util.List;
 @CrossOrigin
 @Api(description = "角色管理")
 @RestController
-@RequestMapping("/aclservice/role")
+@RequestMapping("/admin/acl/role")
 public class RoleController {
     @Autowired
     RoleService roleService;
@@ -39,7 +39,7 @@ public class RoleController {
 
         Page<Role> pageRole = new Page<>(page,limit);
         QueryWrapper<Role> wrapper = new QueryWrapper<>();
-        if (!StringUtils.isEmpty(role.getRoleName())){
+        if (role != null && !StringUtils.isEmpty(role.getRoleName())){
             wrapper.like("role_name",role.getRoleName());
         }
         roleService.page(pageRole,wrapper);
